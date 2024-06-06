@@ -19,4 +19,43 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            <div class="card-body">
+                <form action="/diary/comment/{{diary.id}}" method="post" enctype="application/x-www-form-urlencoded">
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Add Comment</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 offset-2">
+            {{#if comments}}
+                {{#each comments}}
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img 
+                                src="https://img.freepik.com/premium-vector/bearded-man-avatar-man-vector-portrait_9385-36.jpg" 
+                                class="img-fluid rounded-start" alt="user logo"
+                                style="width: 180px;"
+                                >
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">Username</h5>
+                                    <p class="card-text">{{ comment }}</p>
+                                    <p class="card-text"><small class="text-body-secondary">{{ createdAt }}</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+            {{/if}}
+        </div>
+    </div>
 </div>
