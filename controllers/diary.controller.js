@@ -18,13 +18,12 @@ const getMyDiary = async (req, res) => {
     }
 }
 
-//Desc      Get all my diaries page
+//Desc      create new diary page
 //Route     POST /diary/my
 //Acess     Private
 const addNewDiary = async (req, res) => {
     try {
         const { imageUrl, text } = req.body
-        console.log(req.body.text);
         await Diary.create({
             imageUrl: imageUrl,
             text: text
@@ -35,7 +34,25 @@ const addNewDiary = async (req, res) => {
     }
 }
 
+//Desc      Get diary
+//Route     GET /diary/my
+//Acess     Private
+const getDiaryById = async (req, res) => {
+    try {
+        const diary = await Diary.findByPk(req.params.id, {
+            raw: true
+        });
+        res.render('diary/one-diary', {
+            title: 'one diary',
+            diary: diary
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     getMyDiary,
-    addNewDiary
+    addNewDiary,
+    getDiaryById
 }
