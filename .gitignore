@@ -1,4 +1,13 @@
-/node_modules
-diarybook_shablon
+
+# Node Mudules is install Packages folder
+/node_modules/*
+
+# html & bootstrap template
+diarybook_template
+
+# ?
+/database/*
+
+# Cooming soon Open
 .github
 README.md
