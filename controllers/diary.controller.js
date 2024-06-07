@@ -13,7 +13,7 @@ const getMyDiary = async (req, res) => {
         res.render('diary/my-diary', {
             title: 'My diary',
             diaries: diaries.reverse(),
-            isAuthenticated: req.isLogged
+            isAuthenticated: req.session.isLogged
         })
     } catch (error) {
         console.log(error);

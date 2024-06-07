@@ -6,7 +6,7 @@ const User = db.user;
 //Acess     Public
 const getLoginPage = async (req, res) => {
     try {
-        const isAuthenticated = req.get('Cookie').split('=')[1] === 'true';
+        const isAuthenticated = req.session.isLogged;
         res.render('auth/login', {
             title: 'Login',
             isAuthenticated
@@ -21,14 +21,33 @@ const getLoginPage = async (req, res) => {
 //Acess     Public
 const loginUser = async (req, res) => {
     try {
-        res.setHeader('Set-Cookie', 'loggedIn=true');
-        res.redirect('/diary/my')
+        req.session.isLogged = true;
+        req.session.user = {
+            id: 1,
+            email: 'user@example.com',
+            name: 'user',
+            password: 'Alan12122006#'
+        }
+        req.session.save(err => {
+            if (err) throw err;
+            res.redirect('/diary/my')
+        });
     } catch (error) {
         console.log(error);
     }
 }
 
+//Desc      Logout user
+//Route     POST /auth/logout
+//Acess     Private
+const logout = (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/auth/login');
+    })
+}
+
 module.exports = {
     getLoginPage,
-    loginUser
+    loginUser,
+    logout
 }
