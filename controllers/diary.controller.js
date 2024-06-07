@@ -8,8 +8,11 @@ const Comment = db.comment;
 const getMyDiary = async (req, res) => {
     try {
         const diaries = await Diary.findAll({
-            raw: true
-        });
+            raw: true,
+            plain: false,
+            include: ['user'],
+            nest: true
+        })
         res.render('diary/my-diary', {
             title: 'My diary',
             diaries: diaries.reverse(),
@@ -28,7 +31,8 @@ const addNewDiary = async (req, res) => {
         const { imageUrl, text } = req.body
         await Diary.create({
             imageUrl: imageUrl,
-            text: text
+            text: text,
+            userId: req.session.user.id
         })
         res.redirect('/diary/my')
     } catch (err) {
@@ -44,14 +48,16 @@ const getDiaryById = async (req, res) => {
         const data = await Diary.findByPk(req.params.id, {
             raw: false,
             plain: true,
-            include: ['comment'],
+            include: ['comment', 'user'],
             nest: true
-        });
+        })
         const diary = await data.toJSON();
+        console.log(diary);
         res.render('diary/one-diary', {
             title: 'Diary',
             diary: diary,
-            comments: diary.comment.reverse()
+            comments: diary.comment.reverse(),
+            isAuthenticated: req.session.isLogged
         })
     } catch (error) {
         console.log(error);
