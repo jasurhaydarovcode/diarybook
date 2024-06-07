@@ -22,21 +22,26 @@ const getLoginPage = async (req, res) => {
 //Acess     Public
 const loginUser = async (req, res) => {
     try {
-        req.session.isLogged = true;
-        req.session.user = {
-            id: 1,
-            email: 'user@example.com',
-            name: 'user',
-            password: 'Alan12122006#'
+        const userExist = await User.findOne({ where: { email: req.body.email } });
+        if (userExist){
+            const matchPassword = await bcrypt.compare(req.body.password, userExist.password);
+            if (matchPassword) {
+                req.session.isLogged = true;
+                req.session.user = userExist;
+                req.session.save(err => {
+                    if (err) throw err;
+                    return res.redirect('/diary/my')
+                })
+            } else {
+                return res.redirect('/auth/login')
+            }
+        } else {
+            return res.redirect('/auth/login')
         }
-        req.session.save(err => {
-            if (err) throw err;
-            res.redirect('/diary/my')
-        });
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 //Desc      Get registration page
 //Route     GET /auth/registration
