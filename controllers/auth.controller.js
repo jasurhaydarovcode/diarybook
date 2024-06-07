@@ -37,6 +37,43 @@ const loginUser = async (req, res) => {
     }
 }
 
+//Desc      Get registration page
+//Route     GET /auth/registration
+//Acess     Public
+const getRegisterPage = async (req, res) => {
+    try {
+        res.render('auth/registration', {
+            title: 'Registration',
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+//Desc      register new user
+//Route     POST /auth/registration
+//Acess     Public
+const registerUser = async (req, res) => {
+    try {
+        const { email, name, password, password2 } = req.body;
+        if(password !== password2){
+            return res.redirect('/auth/registration')
+        }
+        const userExist = await User.findOne({ email })
+        if(userExist){
+            return res.redirect('/auth/registration')
+        }
+        await User.create({
+            email,
+            name,
+            password
+        })
+        return res.redirect('/auth/login')
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 //Desc      Logout user
 //Route     POST /auth/logout
 //Acess     Private
@@ -49,5 +86,7 @@ const logout = (req, res) => {
 module.exports = {
     getLoginPage,
     loginUser,
-    logout
+    logout,
+    getRegisterPage,
+    registerUser
 }
