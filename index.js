@@ -17,6 +17,7 @@ app.set('view engine', '.hbs');
 
 //Initialize routes
 app.use('/diary', require('./routes/diary.route'));
+app.use('/auth', require('./routes/auth.route'));
 
 const PORT = process.env.PORT || 10000
 
