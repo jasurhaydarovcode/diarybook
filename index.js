@@ -30,6 +30,7 @@ app.set('view engine', '.hbs');
 //Initialize routes
 app.use('/diary', require('./routes/diary.route'));
 app.use('/auth', require('./routes/auth.route'));
+app.use('/user', require('./routes/user.route'));
 
 const PORT = process.env.PORT || 10000
 

@@ -52,7 +52,6 @@ const getDiaryById = async (req, res) => {
             nest: true
         })
         const diary = await data.toJSON();
-        console.log(diary);
         res.render('diary/one-diary', {
             title: 'Diary',
             diary: diary,
