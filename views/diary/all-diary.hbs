@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            {{#if diaries}}
+                {{#each diaries}}
+                    <div class="card mb-5 mt-5">
+                        <div class="card-body">
+                            <div class="list-group mb-1">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <img src="https://img.freepik.com/premium-vector/bearded-man-avatar-man-vector-portrait_9385-36.jpg" class="rounded-circle float-start" style="height: 30px;" alt="...">
+                                    <h5 class="card-title">{{user.name}}</h5>
+                                </a>
+                            </div>
+                            <p class="card-text">{{text}}</p>
+                            <p class="card-text"><small class="text-muted">{{createdAt}}</small></p>
+                        </div>
+                        {{#if imageUrl}}
+                            <img src="{{imageUrl}}" class="card-img-bottom" alt="...">
+                        {{/if}}    
+                        <div class="card-footer">
+                            <a href="/diary/{{id}}" type="button" class="btn btn-success">Open</a>
+                        </div>
+                    </div>
+                {{/each}}
+            {{else}}
+                <h1>No diaries added yet</h1>
+            {{/if}}
+        </div>
+    </div>
+</div>

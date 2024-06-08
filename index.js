@@ -31,6 +31,16 @@ app.set('view engine', '.hbs');
 app.use('/diary', require('./routes/diary.route'));
 app.use('/auth', require('./routes/auth.route'));
 app.use('/user', require('./routes/user.route'));
+app.use('/', async(req, res) => {
+    try {
+        if (req.session.isLogged) {
+            return res.redirect('/diary/my');
+        }
+        res.redirect('/auth/login');
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 const PORT = process.env.PORT || 10000
 
