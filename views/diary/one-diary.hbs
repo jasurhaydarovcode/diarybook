@@ -27,6 +27,7 @@
                         <label for="comment" class="form-label">Add Comment</label>
                         <textarea class="form-control" id="comment" name="comment" rows="4"></textarea>
                     </div>
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <button type="submit" class="btn btn-primary mt-3">Add</button>
                 </form>
             </div>
