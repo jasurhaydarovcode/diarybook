@@ -8,9 +8,15 @@ const {
 } = require('../controllers/auth.controller');
 const router = Router();
 const { guest, protected } = require('../middlewares/auth.mid');
+const { body, check }  = require('express-validator');
 
 router.get('/login', guest, getLoginPage);
-router.post('/login',  guest, loginUser);
+router.post('/login', 
+    check('email')
+        .isEmail()
+        .withMessage('Please enter a valid email'),  
+    guest, loginUser
+);
 router.get('/logout', protected, logout);
 router.get('/registration', guest, getRegisterPage);
 router.post('/registration', guest, registerUser);

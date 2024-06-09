@@ -1,6 +1,7 @@
 const db = require('../models/index.model');
 const bcrypt = require('bcryptjs');
 const User = db.user;
+const { validationResult } = require('express-validator')
 
 //Desc      Get login page
 //Route     GET /auth/login
@@ -8,7 +9,7 @@ const User = db.user;
 const getLoginPage = async (req, res) => {
     try {
         const isAuthenticated = req.session.isLogged;
-        res.render('auth/login', {
+        return res.render('auth/login', {
             title: 'Login',
             isAuthenticated,
             errorMessage: req.flash('error')
@@ -23,6 +24,15 @@ const getLoginPage = async (req, res) => {
 //Acess     Public
 const loginUser = async (req, res) => {
     try {
+        const isAuthenticated = req.session.isLogged;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).render('auth/login', {
+                title: 'Login',
+                isAuthenticated,
+                errorMessage: errors.array()[0].msg
+            })
+        }
         const userExist = await User.findOne({ where: { email: req.body.email } });
         if (userExist){
             const matchPassword = await bcrypt.compare(req.body.password, userExist.password);
