@@ -12,10 +12,12 @@ const {
 const router = Router();
 const { protected } = require('../middlewares/auth.mid');
 const { body, check } = require('express-validator');
+const upload = require('../utils/fileUpload');
 
 router.get('/my', protected, getMyDiary);
 router.get('/all', protected, getAllDiary);
 router.post('/add', 
+    upload.single('imageUrl'),
     body('text', 'Please add at least 2 characters to your diary').isLength({ min: 2 }), 
     protected, 
     addNewDiary

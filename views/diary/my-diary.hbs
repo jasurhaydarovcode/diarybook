@@ -6,10 +6,10 @@
                     {{#if errorMessage}}
                         <div class="alert alert-danger" role="alert">{{ errorMessage }}</div>
                     {{/if}}
-                    <form action="/diary/add" method="post" enctype="application/x-www-form-urlencoded">
+                    <form action="/diary/add" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="imageUrl" class="form-label">Image Url</label>
-                            <input class="form-control" type="text" name="imageUrl" id="imageUrl">
+                            <input class="form-control" type="file" name="imageUrl" id="imageUrl">
                         </div>
                         <div class="mb-3">
                             <label for="text" class="form-label">What do we write about?</label>

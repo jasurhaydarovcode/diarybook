@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
+const path = require('path');
 const pgStore = require('connect-pg-simple')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
@@ -29,6 +30,9 @@ app.use(flash());
 //Initialize template engine (handlebars)
 app.engine('.hbs', exphbs.engine({ extname: '.hbs' }));
 app.set('view engine', '.hbs');
+
+//Static File
+app.use(express.static(path.join(__dirname, 'public')));
 
 //Initialize routes
 app.use('/diary', require('./routes/diary.route'));

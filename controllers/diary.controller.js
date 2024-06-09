@@ -55,17 +55,26 @@ const getAllDiary = async (req, res) => {
 //Acess     Private
 const addNewDiary = async (req, res) => {
     try {
-        const { imageUrl, text } = req.body
+        const { text } = req.body
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            const diaries = await Diary.findAll({
+                where: { userId: req.session.user.id },
+                raw: true,
+                plain: false,
+                include: ['user'],
+                nest: true
+            })
             return res.status(400).render('diary/my-diary', {
                 title: 'My Diaries',
                 isAuthenticated: req.session.isLogged,
+                diaries: diaries.reverse(),
                 errorMessage: errors.array()[0].msg
             })
         }
+        const fileUrl = req.file ? '/uploads/' + req.file.filename : ''
         await Diary.create({
-            imageUrl: imageUrl,
+            imageUrl: fileUrl,
             text: text,
             userId: req.session.user.id
         })
