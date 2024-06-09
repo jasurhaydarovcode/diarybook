@@ -33,22 +33,38 @@ const getMyDiary = async (req, res) => {
 //Acess     Private
 const getAllDiary = async (req, res) => {
     try {
+        const page = +req.query.page || 1;
+        const itemsLimit = 4;
+        const offset = (page - 1) * itemsLimit;
         const diaries = await Diary.findAll({
-            where: { userId: { [Op.ne]: req.session.user.id } },
             raw: true,
             plain: false,
             include: ['user'],
-            nest: true
-        })
+            nest: true,
+            limit: itemsLimit,
+            offset: offset
+        });
+        const totalData = await Diary.count()
+        const lastPage = Math.ceil(totalData / itemsLimit)
         res.render('diary/all-diary', {
             title: 'All diary',
             diaries: diaries.reverse(),
-            isAuthenticated: req.session.isLogged
-        })
+            isAuthenticated: req.session.isLogged,
+            totalData: totalData,
+            currentPage: page,
+            nextPage: page + 1,
+            previousPage: page - 1,
+            hasNextPage: page * itemsLimit < totalData, 
+            hasPrevPage: page - 1,
+            lastPage: lastPage,
+            currentPageAndPrevPageNotEqualOne: page !== 1 && (page - 1) !== 1,
+            lastPageChecking: lastPage !== page && (page + 1) !== lastPage
+        });
     } catch (error) {
         console.log(error);
     }
 }
+
 
 //Desc      create new diary page
 //Route     POST /diary/my
