@@ -20,6 +20,7 @@ const getMyDiary = async (req, res) => {
             title: 'My diary',
             diaries: diaries.reverse(),
             isAuthenticated: req.session.isLogged,
+            errorMessage: req.flash('error')
         })
     } catch (error) {
         console.log(error);
@@ -54,6 +55,10 @@ const getAllDiary = async (req, res) => {
 const addNewDiary = async (req, res) => {
     try {
         const { imageUrl, text } = req.body
+        if (text === '') {
+            req.flash('error', 'Please add your diary')
+            return res.redirect('/diary/my')
+        }
         await Diary.create({
             imageUrl: imageUrl,
             text: text,
@@ -81,7 +86,8 @@ const getDiaryById = async (req, res) => {
             title: 'Diary',
             diary: diary,
             comments: diary.comment.reverse(),
-            isAuthenticated: req.session.isLogged
+            isAuthenticated: req.session.isLogged,
+            errorMessage: req.flash('error')
         })
     } catch (error) {
         console.log(error);
@@ -139,6 +145,10 @@ const deleteDiary = async (req, res) => {
 const addCommentToDiary = async (req, res) => {
     try {
         const user = await User.findByPk(req.session.user.id);
+        if (req.body.comment === '') {
+            req.flash('error', 'Please enter a comment');
+            return res.redirect('/diary/' + req.params.id);
+        }
         await Comment.create({
             name: user.name,
             comment: req.body.comment,

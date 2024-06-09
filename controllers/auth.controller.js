@@ -10,7 +10,8 @@ const getLoginPage = async (req, res) => {
         const isAuthenticated = req.session.isLogged;
         res.render('auth/login', {
             title: 'Login',
-            isAuthenticated
+            isAuthenticated,
+            errorMessage: req.flash('error')
         })
     } catch (error) {
         console.log(error);
@@ -33,9 +34,11 @@ const loginUser = async (req, res) => {
                     return res.redirect('/diary/my')
                 })
             } else {
+                req.flash('error', 'You entered wrong email or password')
                 return res.redirect('/auth/login')
             }
         } else {
+            req.flash('error', 'You entered wrong email or password')
             return res.redirect('/auth/login')
         }
     } catch (error) {
@@ -50,6 +53,7 @@ const getRegisterPage = async (req, res) => {
     try {
         res.render('auth/registration', {
             title: 'Registration',
+            errorMessage: req.flash('error')
         })
     } catch (error) {
         console.log(error);
@@ -63,10 +67,12 @@ const registerUser = async (req, res) => {
     try {
         const { email, name, password, password2 } = req.body;
         if(password !== password2){
+            req.flash('error', 'Passwords do not match');
             return res.redirect('/auth/registration')
         }
         const userExist = await User.findOne({ where: { email } })
         if(userExist){
+            req.flash('error', 'This email already exists')
             return res.redirect('/auth/registration')
         }
         const salt = await bcrypt.genSalt(11)

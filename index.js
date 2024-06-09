@@ -4,6 +4,7 @@ const exphbs = require('express-handlebars');
 const session = require('express-session');
 const pgStore = require('connect-pg-simple')(session);
 const csrf = require('csurf');
+const flash = require('connect-flash');
 const pool = require('./config/db');
 const db = require('./models/index.model');
 
@@ -23,6 +24,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+app.use(flash());
 
 //Initialize template engine (handlebars)
 app.engine('.hbs', exphbs.engine({ extname: '.hbs' }));
