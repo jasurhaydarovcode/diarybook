@@ -11,10 +11,15 @@ const {
 } = require('../controllers/diary.controller');
 const router = Router();
 const { protected } = require('../middlewares/auth.mid');
+const { body, check } = require('express-validator');
 
 router.get('/my', protected, getMyDiary);
 router.get('/all', protected, getAllDiary);
-router.post('/add', protected, addNewDiary);
+router.post('/add', 
+    body('text', 'Please add at least 2 characters to your diary').isLength({ min: 2 }), 
+    protected, 
+    addNewDiary
+);
 router.get('/update/:id', protected, updateDiaryPage);
 router.post('/update/:id', protected, updateDiary);
 router.post('/delete/:id', protected, deleteDiary);
